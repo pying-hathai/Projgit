@@ -21,8 +21,6 @@ hihi
 ### 1) emp_profile to profile_group ###
 ![image](https://github.com/pying-hathai/Projgit/assets/132686635/8cff9f0d-00ec-42c4-95bc-85e8b4a78ecb)
 
-![image](https://github.com/pying-hathai/Projgit/assets/132686635/8fed4756-f310-48d2-bdc1-a2554b45ba64)
-
 ### 2) emp_groupuser to profile_group ###
 
 ![image](https://github.com/pying-hathai/Projgit/assets/132686635/4ad579e0-00a5-40cc-9806-672771ed2310)
