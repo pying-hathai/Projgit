@@ -60,15 +60,85 @@ CREATE TABLE `dep` (
 
 ### สร้าง Relational table เพื่อเชื่อมความสัมพันธ์ One to Many 2 Table เข้าด้วยกัน ###
 ### 1) emp_profile to profile_group ###
+
+Table: profile_group
+```
+CREATE TABLE `profile_groupuser` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `emp_profile_id` int DEFAULT NULL,
+  `emp_groupuser_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_profile_groupuser_to_emp_profile_idx` (`emp_profile_id`),
+  KEY `fk_profile_groupuser_to_emp_groupuser_idx` (`emp_groupuser_id`),
+  CONSTRAINT `fk_profile_groupuser_to_emp_groupuser` FOREIGN KEY (`emp_groupuser_id`) REFERENCES `emp_groupuser` (`id`),
+  CONSTRAINT `fk_profile_groupuser_to_emp_profile` FOREIGN KEY (`emp_profile_id`) REFERENCES `emp_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+
 ![image](https://github.com/pying-hathai/Projgit/assets/132686635/8cff9f0d-00ec-42c4-95bc-85e8b4a78ecb)
 
 ### 2) emp_groupuser to profile_group ###
+
+Table: emp_groupuser
+
+```
+CREATE TABLE `emp_groupuser` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `groupuser` varchar(45) NOT NULL,
+  `startdate` date DEFAULT NULL,
+  `enddate` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
 
 ![image](https://github.com/pying-hathai/Projgit/assets/132686635/4ad579e0-00a5-40cc-9806-672771ed2310)
 
 ![image](https://github.com/pying-hathai/Projgit/assets/132686635/9aba6da5-a570-4657-bca7-6b48a9f79c3a)
 
+### สร้าง Foreign key ###
+
+สร้าง Foreign key แบบ ```Casecade``` - เมื่อ PK ถูกลบ FK จะถูกลบด้วย
+
+Foreign key แบบ ```SET NULL``` - เมื่อ PK ถูกลบ FK จะเป็น Null
+
+Foreign key แบบ ```RESTRICT``` - PK จะไม่ถูกลบเมื่อมี FK ห้อยตามอยู่
+
+### Query1 ###
+โจทย์: แสดง employee , department
+```
+select p.empusername, d.depname, d.dep_id
+from emp_profile p
+join dep d
+on p.dep_id = d.id
+```
+![image](https://github.com/pying-hathai/Projgit/assets/132686635/66121bb2-5db8-41e4-a12b-c6d3e6f7c0c3)
+
+### Query2 ###
+โจทย์: แสดง employee , department และนับ จำนวนคณะ
+```
+select 
+	d.depname as department_name,
+	d.dep_id as department_id,
+    count(p.empusername) as count_username,
+    group_concat(p.empusername) as username
+from dep d
+join emp_profile p
+on d.id = p.dep_id
+group by d.depname;
+```
+![image](https://github.com/pying-hathai/Projgit/assets/132686635/5cb02486-000c-4cad-8212-c4c77fb62f88)
 
 
+### Query3 ###
+โจทย์: แสดงข้อมูลemp_codeและข้อมูลการติดต่อ
+
+```
+select p.nametitle, p.lastname, p.empusername, c.tel, c.email
+from emp_profile p
+join emp_contact c
+on p.id = c.emp_profile_id;
+```
+![image](https://github.com/pying-hathai/Projgit/assets/132686635/bbcadf70-5678-4dad-ae8e-9a5248624c04)
 
 
