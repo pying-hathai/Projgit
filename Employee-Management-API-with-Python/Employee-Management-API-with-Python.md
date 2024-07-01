@@ -1,6 +1,9 @@
 hihi
 # สร้าง Logic บน Python เพื่อใช้งานกับ API ข้อมูลพนักงาน #
 
+## สร้าง Input
+![image](https://github.com/pying-hathai/Projgit/assets/132686635/30ece01c-4105-4af4-82df-b3802ec4c1db)
+
 ## Logic 1 ใช้ Post ##
 1. ตรวจสอบว่ามี user สร้างอยู่แล้วหรือไม่
 2. ถ้าไม่มีให้ insert โดย function post
