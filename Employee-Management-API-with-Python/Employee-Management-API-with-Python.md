@@ -38,6 +38,8 @@ else:
 แก้ไขชื่อใหม่
 1. ตรวจสอบว่าชื่อเดิมมี user id อะไร
 2. put request ชื่อ id นั้นเพื่อแก้ไขชื่อ
+   
+![image](https://github.com/pying-hathai/Projgit/assets/132686635/818aae9d-cf0a-4f43-b436-6eaeac560b19)
 
 ```
 #main put 
