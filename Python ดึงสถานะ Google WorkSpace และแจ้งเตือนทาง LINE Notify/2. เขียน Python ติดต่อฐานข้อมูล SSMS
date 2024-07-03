@@ -1,0 +1,120 @@
+# เขียน Python ติดต่อฐานข้อมูล SSMS
+hihi
+
+```
+#เขียน Python ติดต่อฐานข้อมูล SSMS
+!pip install pyodbc
+#import library
+import pyodbc
+
+#create database name "google_Workspace" at ssms by manual before create a connection to database
+
+#Create a connection to database
+
+try:
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-01EVDPJ\SQLEXPRESS;'
+                          'Trusted_Connection=yes;'
+                         'autocommit=True;')
+except pyodbc.Error as e:
+    print("Error: Could not make connection to database")
+
+#Close connection
+#get new cursor
+try:
+    conn.close()
+except pyodbc.Error as e:
+    print('Error: cannot close  connection')
+    
+#Re-connection and add database name
+try:
+    conn = pyodbc.connect('Driver={SQL Server};'
+                          'Server=DESKTOP-01EVDPJ\SQLEXPRESS;'
+                          'Trusted_Connection=yes;'
+                          'Database=google_Workspace;'
+                         'autocommit=True;')
+except pyodbc.Error as e:
+    print('Error: Could not make connection to database')
+   
+try:
+    cursor = conn.cursor()
+except pyodbc.Error as e:
+    print('Error')
+
+#Create Table google_Workspace_status
+#one time created
+#try:
+#    cursor.execute("CREATE TABLE dbo.google_Workspace_status  (\
+#    id INT IDENTITY(1,1),\
+#    service_name varchar(50),\
+#    service_status varchar(50),\
+#    created_date smalldatetime,\
+#    modified_date smalldatetime);")
+#except pyodbc.Error as e:
+#    print(e)
+    
+#conn.commit()
+
+#create select function
+
+def select_service(conn, cursor, data, n):
+    #select_service(conn, cursor, df_name, 0)
+    try:
+        service_name_db = data['service_name'][n]
+        sel = "SELECT * FROM google_workspace.dbo.google_Workspace_status \
+                where service_name = " + "'"+ service_name_db + "'" + ";"
+        cursor.execute(sel)
+    except pyodbc.Error as e:
+        print(e)
+
+#select_service(conn, cursor, df_name, 0)   
+
+#ฟังก์ชั่น fetchall() เป็นฟังก์ชั่นที่ใช้สำหรับดึงเอาข้อมูลของ Database มาแสดง
+#เรียกข้อมูลของเรามาทั้งหมดที่มีอยู่ในฐานข้อมูล
+#row = cursor.fetchone()
+#row_list = []
+#while row:
+    #print(row)
+#    row_list.append(row)
+#    row = cursor.fetchone()
+#conn.commit()
+    
+#print(row_list)
+
+#create update function
+
+def update_service(conn, cursor, data, n):
+    #update_service(conn, cursor, df_name, 0)
+    
+    try:       
+        service_name_update = data['service_name'][n] 
+        status_name_update = data['service_status'][n]
+        current_date_update = data['current_date'][n]
+        #current_date_update = "2024-03-30 22:47:32"
+        #status_name_update = 'avalibility'
+
+        sql = '''UPDATE google_workspace.dbo.google_Workspace_status 
+        SET service_status = '%s' , 
+        modified_date = '%s' 
+        WHERE service_name = '%s' '''
+        val = (status_name_update, current_date_update, service_name_update) 
+        cursor.execute(sql %val)
+
+    except pyodbc.Error as e:
+        print(e)
+    conn.commit()
+
+#create insert function
+def insert_service(conn, cursor, data, n):
+    #insert_service(conn, cursor, df_name, 0)
+    service_name_update = data['service_name'][n] 
+    status_name_update = data['service_status'][n]
+    current_date_update = data['current_date'][n]
+    try:
+        ins = "INSERT INTO google_workspace.dbo.google_Workspace_status (service_name, service_status, created_date, modified_date) VALUES(?,?,?,?)"
+        val = service_name_update, status_name_update, current_date_update, current_date_update
+        cursor.execute(ins,val)
+    except pyodbc.Error as e:
+        print(e)
+    conn.commit()p
+```
