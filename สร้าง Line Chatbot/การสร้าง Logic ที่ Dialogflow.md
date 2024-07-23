@@ -31,3 +31,6 @@ $ นำหน้าparameter เพื่อเรียกใช้ parameter 
 กรณีใช่ ให้ตั้งค่า Response ให้ตอบกลับทาง Line แบบ  Text response
 ![image](https://github.com/user-attachments/assets/7de6451e-dd28-4abd-b63b-1a0d8139322e)
 
+## สร้าง Connection ไปที่ Line chatbot
+![image](https://github.com/user-attachments/assets/85d56de0-807f-4182-9b4d-c1f20ac2f9fd)
+
