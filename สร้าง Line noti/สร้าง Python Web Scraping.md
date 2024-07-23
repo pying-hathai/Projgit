@@ -1,1 +1,109 @@
 # สร้าง Python Web Scraping
+สร้าง Python Web Scraping เพื่อดึงข้อมูล alert จาก web
+![image](https://github.com/user-attachments/assets/23436140-b77f-460c-b16a-dbf63de88667)
+
+
+```
+import requests
+import bs4
+from bs4 import BeautifulSoup
+import json
+import pandas as pd
+import numpy as np 
+import urllib3
+
+urllib3.disable_warnings()
+
+import requests
+
+from datetime import datetime
+import os
+
+########################################
+def write_file(filename, data):
+    if os.path.isfile(filename):
+        with open(filename, 'a') as f:          
+            f.write('\n' + data)   
+    else:
+        with open(filename, 'w') as f:                   
+            f.write(data)
+  
+def print_time():   
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    data = "Current Time = " + current_time
+    return data
+########################################
+
+##############LINENOTI#################
+def linenoti(ip_msg,status):
+    #linenoti('Yo!')
+    token = 'tcGa3lQMaxtkt5sGHGGdApaNIBpVtTdOZ9nfN17VipR'
+    url = 'https://notify-api.line.me/api/notify'
+    headers = {'Content-Type': 'application/x-www-form-urlencoded',
+              'Authorization': 'Bearer ' + token}
+    msg = ip_msg
+    if status == 'available':
+        req = requests.post(url, headers=headers, data= {'stickerPackageId': 789, 'stickerId':10858, 'message':msg})
+    else:
+        req = requests.post(url, headers=headers, data= {'stickerPackageId': 4, 'stickerId':274, 'message':msg})
+    
+    #print(req)
+##############LINENOTI#################
+
+
+url='https://www.cuerp.chula.ac.th/'
+request = requests.get(url, verify=False)
+soup = bs4.BeautifulSoup(request.text,"html.parser")
+
+#จัดการข้อมูล
+data = soup.find_all('div',{'class':'systems-container d-flex flex-column'})
+data_alert = soup.find_all('div',{'class':'system-status outage'})
+data_title = soup.find_all('div',{'class':'system-title'})
+
+#จัดการข้อมูล List
+title_list = []
+alert_list = []
+
+j = 0
+for i in data_title:
+    title = i.text.strip()
+    alert = data_alert[j].text.strip()
+    j += 1
+    
+    title_list.append(title)
+    alert_list.append(alert)
+    
+#จัดการข้อมูล dataframe
+df_title = pd.DataFrame([title_list]).transpose()
+df_title = df_title.rename(columns={0: 'Title'})
+
+df_alert = pd.DataFrame([alert_list]).transpose()
+df_title['default_alert'] = df_alert
+
+#ดึงวันที่ปัจจุบัน
+from datetime import datetime
+current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+df_title['current_date'] = current_time
+
+df_title['Check'] = ''
+df_title['Result'] = ''
+
+#สร้างเงื่อนไข
+df_title['Check'] = df_title['default_alert'].apply(lambda i:i == 'ระบบขัดข้อง')
+#Default status [TRUE] คือ ระบบขัดข้อง 
+# ดังนั้นถ้าขึ้นว่า ระบบปกติ [FALSE] ให้แจ้งเตือน
+if bool(df_title['Check'][0]) or bool(df_title['Check'][1]) is True:
+    df_title.loc[0,'Result'] = 'Default'
+    df_title.loc[1,'Result'] = 'Default'
+    print('Default')
+    write_file('Default.txt' , print_time())
+else:
+    df_title.loc[0,'Result'] = 'Alert'
+    df_title.loc[1,'Result'] = 'Alert'
+    linenoti('Alert, Please check system Fiori and S/4HANA','status')
+    print('Alert')
+    write_file('Alert.txt' , print_time())
+
+
+```
