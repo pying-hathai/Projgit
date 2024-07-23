@@ -38,7 +38,7 @@ def print_time():
 ##############LINENOTI#################
 def linenoti(ip_msg,status):
     #linenoti('Yo!')
-    token = 'tcGa3lQMaxtkt5sGHGGdApaNIBpVtTdOZ9nfN17VipR'
+    token = 'tcGa3lQMaxtkt5sxxxxxxxxxxxxxxxx'
     url = 'https://notify-api.line.me/api/notify'
     headers = {'Content-Type': 'application/x-www-form-urlencoded',
               'Authorization': 'Bearer ' + token}
