@@ -1,6 +1,8 @@
 # ออกแบบ Database สำหรับจัดการข้อมูลพนักงาน #
 
 hihi
+![image](https://github.com/user-attachments/assets/88fd6e1f-0d1a-4b67-95b6-1cb99d5e392c)
+
 
 ## One to One ##
 Table: emp_profile
