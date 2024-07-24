@@ -5,14 +5,17 @@ hihi
 ## One to One ##
 Table: emp_profile
 ```
-CREATE TABLE `emp_contact` (
+CREATE TABLE `emp_profile` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tel` int NOT NULL,
-  `email` varchar(45) NOT NULL,
+  `nametitle` varchar(10) NOT NULL,
+  `firstname` varchar(45) NOT NULL,
+  `lastname` varchar(45) NOT NULL,
+  `empusername` varchar(20) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dep_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_empcontact_empprofile_idx` (`emp_profile_id`),
-  CONSTRAINT `fk_empcontact_empprofile` FOREIGN KEY (`emp_profile_id`) REFERENCES `emp_profile` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `emp_code_UNIQUE` (`empusername`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 ```
 
